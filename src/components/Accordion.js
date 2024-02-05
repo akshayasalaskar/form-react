@@ -258,13 +258,13 @@ const Accordion = () => {
                               {editMode === index ? (
                                 <>
                                   <button
-                                    className="m-2 mb-1 w-3"
+                                    className="m-2 mb-3 w-3"
                                     onClick={handleCancelClick}
                                   >
                                     <MdOutlineCancel />
                                   </button>
                                   <button
-                                    className="m-2 mb-1 w-3"
+                                    className="m-2 mb-3 w-3"
                                     onClick={() => handleSaveClick(index)}
                                   >
                                     <MdOutlineCheckCircle />
@@ -273,14 +273,14 @@ const Accordion = () => {
                               ) : (
                                 <>
                                   <button
-                                    className="m-2 mb-1 "
+                                    className="m-2 mb-3 "
                                     onClick={() => handleDeleteClick(index)}
                                   >
                                     <FaTrashAlt />
                                   </button>
 
                                   <button
-                                    className="m-2 mb-1"
+                                    className="m-2 mb-3"
                                     onClick={() => handleEditClick(index)}
                                   >
                                     <FaPencil />
