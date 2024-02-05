@@ -28,23 +28,41 @@ const Accordion = () => {
     return currentDate.getFullYear() - birthDate.getFullYear();
   };
 
-  const handleAccordionClick = (originalIndex) => {
+  const handleAccordionClick = (userId) => {
     if (editMode !== null) return;
 
     setEditMode(null);
     setUsers((prevUsers) =>
-      prevUsers.map((user, i) => ({
+      prevUsers.map((user) => ({
         ...user,
-        isOpen: i === originalIndex ? !user.isOpen : false,
+        isOpen: user.id === userId ? !user.isOpen : user.isOpen,
       }))
     );
   };
+
+  const handleAgeChange = (index, newValue) => {
+    setUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = { ...updatedUsers[index], age: newValue };
+      return updatedUsers;
+    });
+  };
+
   const handleEditClick = (index) => {
     setEditMode(index);
   };
-
   const handleSaveClick = (index) => {
     setEditMode(null);
+
+    // If you need to update the calculated age, you can do it here
+    setUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = {
+        ...updatedUsers[index],
+        age: calculateAge(updatedUsers[index].dob),
+      };
+      return updatedUsers;
+    });
   };
 
   const handleCancelClick = (index) => {
@@ -70,27 +88,27 @@ const Accordion = () => {
     <div className="">
       <input
         type="text"
-        className="p-2 mb-4 border border-gray-300 rounded-md"
+        className="p-2 mb-4 border w-[420px] border-gray-300 rounded-md"
         placeholder="Search by celebrity name"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <div className=" overflow-y-scroll no-scrollbar h-[400px]">
+      <div className=" overflow-y-scroll no-scrollbar h-[340px] ">
         <ul>
           {users
             .filter((user) =>
               user.first.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((user, index) => (
-              <div className="my-1">
-                <li key={index}>
+              <div className="my-1" key={user.id}>
+                <li>
                   <div
                     className={`rounded-lg bg-pink-50 ${
                       user.isOpen ? "rounded-bl-none rounded-br-none" : ""
                     }`}
                   >
                     <button className=" flex justify-center rounded-lg w-[420px]  bg-pink-50  scroll-auto">
-                      <div onClick={() => handleAccordionClick(index)}>
+                      <div onClick={() => handleAccordionClick(user.id)}>
                         <div className=" flex justify-between rounded-lg w-[400px] items-center bg-pink-50">
                           <div className="flex ml-2 items-center">
                             <img
@@ -143,17 +161,11 @@ const Accordion = () => {
                                 Age:
                                 {editMode === index ? (
                                   <input
+                                    className="rounded-lg bg-pink-50 border border-solid border-gray-500"
                                     type="text"
                                     value={user.age}
                                     onChange={(e) =>
-                                      setUsers((prevUsers) => {
-                                        const updatedUsers = [...prevUsers];
-                                        updatedUsers[index] = {
-                                          ...updatedUsers[index],
-                                          age: e.target.value,
-                                        };
-                                        return updatedUsers;
-                                      })
+                                      handleAgeChange(index, e.target.value)
                                     }
                                   />
                                 ) : (
@@ -164,6 +176,7 @@ const Accordion = () => {
                                 Gender:
                                 {editMode === index ? (
                                   <select
+                                    className="rounded-lg bg-pink-50 border border-solid border-gray-500"
                                     value={user.gender}
                                     onChange={(e) =>
                                       setUsers((prevUsers) => {
@@ -190,10 +203,11 @@ const Accordion = () => {
                                   <span>{user.gender}</span>
                                 )}
                               </label>
-                              <label className="m-1">
+                              <label className="m-1 ">
                                 Country:
                                 {editMode === index ? (
                                   <input
+                                    className="rounded-lg bg-pink-50 border w-[100px]  border-solid border-gray-500"
                                     type="text"
                                     value={user.country}
                                     onChange={(e) =>
@@ -219,6 +233,7 @@ const Accordion = () => {
                                   Description:
                                   {editMode === index ? (
                                     <textarea
+                                      className="rounded-lg bg-pink-50 border border-solid w-[380px] h-[100px] no-scrollbar border-gray-500 "
                                       value={user.description}
                                       onChange={(e) =>
                                         setUsers((prevUsers) => {

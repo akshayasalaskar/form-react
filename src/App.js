@@ -7,7 +7,6 @@ function App() {
   return (
     <div className=" flex justify-center items-center h-screen bg-gradient-to-r from-indigo-500 to-blue-600">
       <div className="App">
-        <h1 className=" ">Hello world!</h1>
         <UserList />
       </div>
     </div>
